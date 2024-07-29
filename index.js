@@ -8,8 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // MongoDB connection string
-const mongoURI = 'mongodb+srv://asharakaveen7:bruiCE1228@nibm-railwayapp.ezixmfd.mongodb.net/?retryWrites=true&w=majority&appName=Nibm-RailwayApp';
-
+const mongoURI = 'mongodb+srv://asharakaveen7:bruiCE1228@nibm-railwayapp.ezixmfd.mongodb.net/Nibm-RailwayAppDB?retryWrites=true&w=majority&appName=Nibm-RailwayApp';
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, {
@@ -20,6 +19,12 @@ mongoose.connect(mongoURI, {
 }).catch(err => {
   console.error('Error connecting to MongoDB', err);
 });
+
+// Import routes
+const trainRoutes = require('./routes/trains');
+
+// Use routes
+app.use('/api/trains', trainRoutes);
 
 // Example route
 app.get('/', (req, res) => {
