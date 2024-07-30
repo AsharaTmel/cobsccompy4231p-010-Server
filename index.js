@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 app.use(bodyParser.json());
 
@@ -21,9 +21,11 @@ mongoose.connect(mongoURI, {
 });
 
 // Import routes
+const routeRoutes = require('./routes/routes');
 const trainRoutes = require('./routes/trains');
 
 // Use routes
+app.use('/api/routes', routeRoutes);
 app.use('/api/trains', trainRoutes);
 
 // Example route
