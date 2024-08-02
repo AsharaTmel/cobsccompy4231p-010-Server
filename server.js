@@ -1,31 +1,25 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = process.env.PORT || 5001;
 
-app.use(cors());
+// Middleware
 app.use(bodyParser.json());
 
-const mongoURI = 'mongodb+srv://asharakaveen7:bruiCE1228@nibm-railwayapp.ezixmfd.mongodb.net/Nibm-RailwayAppDB?retryWrites=true&w=majority&appName=Nibm-RailwayApp';
+// Connect to MongoDB
+const dbUri = 'mongodb+srv://asharakaveen7:bruiCE1228@nibm-railwayapp.ezixmfd.mongodb.net/Nibm-RailwayAppDB?retryWrites=true&w=majority';
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('Error connecting to MongoDB', err);
-});
+mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-const trainRoutes = require('./routes/trains');
-const routeRoutes = require('./routes/routes');
+// Routes
+app.use('/api/engines', require('./routes/engineRoutes'));
+app.use('/api/trains', require('./routes/trainRoutes'));
+app.use('/api/fulltrains', require('./routes/fulltrainRoutes'));
+app.use('/api/routes', require('./routes/routeRoutes'));
 
-app.use('/api/trains', trainRoutes);
-app.use('/api/routes', routeRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+// Start server
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

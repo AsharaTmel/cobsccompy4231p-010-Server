@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
 
 const trainSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  status: { type: String, default: 'Scheduled' },
-  startTime: { type: Date, default: null },
-  currentStop: { type: String, default: null },
-  nextStop: { type: String, default: null },
-  endTime: { type: Date, default: null },
-  route: { type: String, required: true }  // Added route field
+  train_id: { type: String, required: true, unique: true },
+  train_name: { type: String, required: true },
+  route_id: { type: String, required: true },
+  stations: [{ type: String }]
 });
 
-module.exports = mongoose.model('Train', trainSchema);
+const Train = mongoose.model('Train', trainSchema);
+
+module.exports = Train;

@@ -1,0 +1,20 @@
+const express = require('express');
+const router = express.Router();
+const fullTrainController = require('../controllers/fulltrainController');
+
+// Create a new FullTrain
+router.post('/', fullTrainController.createFullTrain);
+
+// Unassign a FullTrain (delete by ID)
+router.delete('/:fulltrain_id', fullTrainController.unassignTrain);
+
+// Update a FullTrain (by ID)
+router.put('/:fulltrain_id', fullTrainController.updateFullTrain);
+
+// Get all FullTrains
+router.get('/', fullTrainController.getAllFullTrains);
+
+// Get a single FullTrain by ID
+router.get('/:fulltrain_id', fullTrainController.getFullTrainById);
+
+module.exports = router;
