@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -18,7 +19,8 @@ mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use('/api/engines', require('./routes/engineRoutes'));
 app.use('/api/trains', require('./routes/trainRoutes'));
 app.use('/api/fulltrains', require('./routes/fulltrainRoutes'));
-app.use('/api/routes', require('./routes/routeRoutes'));
+app.use('/api/routes', require('./routes/routeRoutes')); // Correct path
+
 
 // Start server
 const PORT = process.env.PORT || 5001;
