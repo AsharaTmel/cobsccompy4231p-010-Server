@@ -53,47 +53,17 @@ exports.getAllTrains = async (req, res) => {
   }
 };
 
-// Get Real-Time Train Data
-exports.getRealTimeData = async (req, res) => {
+// Get Train by ID
+exports.getTrainById = async (req, res) => {
   try {
     const train = await Train.findOne({ train_id: req.params.train_id });
     if (!train) {
-      console.warn('Train not found for real-time data:', req.params.train_id);
+      console.warn('Train not found for ID:', req.params.train_id);
       return res.status(404).json({ error: 'Train not found' });
     }
-
-    const { direction, stations } = train;
-
-    // Randomly select direction if not specified
-    const randomDirection = direction || (Math.random() > 0.5 ? 'upward' : 'downward');
-    
-    // Randomly select a current station
-    const currentIndex = Math.floor(Math.random() * stations.length);
-    const currentStation = stations[currentIndex];
-    
-    // Determine next station based on direction
-    let nextStation;
-    if (randomDirection === 'upward') {
-      nextStation = stations[currentIndex + 1] || 'End of Route';
-    } else {
-      nextStation = currentIndex > 0 ? stations[currentIndex - 1] : 'Start of Route';
-    }
-
-    const startTime = new Date(); // Placeholder
-    const endTime = new Date(startTime.getTime() + 100 * 60 * 60 * 1000); // Placeholder
-    const estimatedEndTime = endTime.toLocaleTimeString();
-
-    res.json({
-      direction: randomDirection,
-      startStation: stations[0], // Assuming the first station is the start station
-      endStation: stations[stations.length - 1], // Assuming the last station is the end station
-      startTime,
-      estimatedEndTime,
-      currentStation,
-      nextStation
-    });
+    res.json(train);
   } catch (error) {
-    console.error('Error fetching real-time data:', error.message);
+    console.error('Error fetching train by ID:', error.message);
     res.status(400).json({ error: error.message });
   }
 };

@@ -21,7 +21,6 @@ app.use('/api/trains', require('./routes/trainRoutes'));
 app.use('/api/fulltrains', require('./routes/fulltrainRoutes'));
 app.use('/api/routes', require('./routes/routeRoutes')); // Correct path
 
-
 // Start server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

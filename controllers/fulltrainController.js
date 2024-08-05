@@ -1,5 +1,3 @@
-const FullTrain = require('../models/Fulltrain');
-
 // Create FullTrain
 exports.createFullTrain = async (req, res) => {
   try {
