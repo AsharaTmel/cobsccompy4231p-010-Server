@@ -67,3 +67,36 @@ exports.getTrainById = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+// Get Trains by Route
+exports.getTrainsByRoute = async (req, res) => {
+  try {
+    const { route_id } = req.params;
+    const trains = await Train.find({ route_id }); // Adjust the query based on your schema
+    if (trains.length === 0) {
+      console.warn('No trains found for route ID:', route_id);
+      return res.status(404).json({ error: 'No trains found for this route' });
+    }
+    res.json(trains);
+  } catch (error) {
+    console.error('Error retrieving trains by route:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Get Trains by Route ID
+exports.getTrainsByRouteId = async (req, res) => {
+  try {
+    const route_id = req.params.route_id;
+    const trains = await Train.find({ route_id: route_id }); // Adjust the query based on your schema
+    if (trains.length === 0) {
+      console.warn('No trains found for route ID:', route_id);
+      return res.status(404).json({ error: 'No trains found for this route' });
+    }
+    res.json(trains);
+  } catch (error) {
+    console.error('Error retrieving trains by route ID:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+};
+

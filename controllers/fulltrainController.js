@@ -99,3 +99,21 @@ exports.getAllFullTrainsRealTimeData = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+// Get FullTrains by Train ID
+exports.getFullTrainsByTrainId = async (req, res) => {
+  try {
+    const train_id = req.params.train_id;
+    const fullTrains = await FullTrain.find({ train_id: train_id });
+    
+    if (fullTrains.length === 0) {
+      return res.status(404).json({ error: 'No FullTrains found for this Train ID' });
+    }
+    
+    res.json(fullTrains);
+  } catch (error) {
+    console.error('Error fetching FullTrains by Train ID:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+};

@@ -2,10 +2,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Import cors
 
 const app = express();
 
 // Middleware
+app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 
 // Connect to MongoDB
@@ -20,6 +22,7 @@ app.use('/api/engines', require('./routes/engineRoutes'));
 app.use('/api/trains', require('./routes/trainRoutes'));
 app.use('/api/fulltrains', require('./routes/fulltrainRoutes'));
 app.use('/api/routes', require('./routes/routeRoutes'));
+
 
 // Start server
 const PORT = process.env.PORT || 5001;

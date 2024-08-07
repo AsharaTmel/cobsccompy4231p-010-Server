@@ -110,7 +110,7 @@ exports.getRealTimeData = async (req, res) => {
     while ((direction === 'upward' && currentIndex < stations.length) || (direction === 'downward' && currentIndex >= 0)) {
       locations.push({
         station: stations[currentIndex],
-        timestamp: new Date(startTime.getTime() + (locations.length * (Math.random() * (15 - 1) + 1)) * 60000) // Random time within 1-15 minutes intervals
+        timestamp: new Date(startTime.getTime() + (locations.length * (Math.random() * (60 - 40) + 1)) * 60000) // Random time within 1-15 minutes intervals
       });
       currentIndex += step;
     }

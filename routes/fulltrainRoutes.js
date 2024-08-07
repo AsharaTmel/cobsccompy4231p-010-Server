@@ -20,4 +20,7 @@ router.get('/:fulltrain_id', fullTrainController.getFullTrainById);
 // Get Real-Time Data for All Full Trains
 router.get('/realtime', fullTrainController.getAllFullTrainsRealTimeData);
 
+// Get FullTrains by Train ID
+router.get('/train/:train_id', fullTrainController.getFullTrainsByTrainId);
+
 module.exports = router;
