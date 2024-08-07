@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Engine = require('../models/Engine');
 const Train = require('../models/Train');
 const Route = require('../models/Route');
-const FullTrain = require('../models/Fulltrain');
+const FullTrain = require('../models/Fulltrain.js');
 
 // MongoDB connection string
 const dbUri = 'mongodb+srv://asharakaveen7:bruiCE1228@nibm-railwayapp.ezixmfd.mongodb.net/Nibm-RailwayAppDB?retryWrites=true&w=majority';

@@ -19,7 +19,7 @@ mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use('/api/engines', require('./routes/engineRoutes'));
 app.use('/api/trains', require('./routes/trainRoutes'));
 app.use('/api/fulltrains', require('./routes/fulltrainRoutes'));
-app.use('/api/routes', require('./routes/routeRoutes')); // Correct path
+app.use('/api/routes', require('./routes/routeRoutes'));
 
 // Start server
 const PORT = process.env.PORT || 5001;

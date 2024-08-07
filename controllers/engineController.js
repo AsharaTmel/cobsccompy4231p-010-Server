@@ -1,7 +1,8 @@
 // engineController.js
 
 const Engine = require('../models/Engine');
-const FullTrain = require('../models/Fulltrain');
+const FullTrain = require('../models/Fulltrain'); // Ensure this matches the model name
+
 const Train = require('../models/Train');
 const Route = require('../models/Route');
 
