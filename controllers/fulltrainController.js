@@ -26,6 +26,17 @@ exports.unassignTrain = async (req, res) => {
 // Update FullTrain
 exports.updateFullTrain = async (req, res) => {
   try {
+    const { engine_id } = req.body;
+
+    // Check if the engine_id is already assigned to another train
+    if (engine_id) {
+      const existingFullTrain = await FullTrain.findOne({ engine_id });
+      if (existingFullTrain) {
+        return res.status(400).json({ error: 'This engine is already assigned to another train' });
+      }
+    }
+
+    // Proceed with updating the full train
     const fullTrain = await FullTrain.findByIdAndUpdate(req.params.fulltrain_id, req.body, { new: true });
     if (!fullTrain) return res.status(404).json({ error: 'FullTrain not found' });
     res.json(fullTrain);
@@ -54,7 +65,7 @@ exports.getFullTrainById = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-// Get Real-Time Data for All Full Trains
+
 // Get Real-Time Data for All Full Trains
 exports.getAllFullTrainsRealTimeData = async (req, res) => {
   try {
@@ -63,7 +74,7 @@ exports.getAllFullTrainsRealTimeData = async (req, res) => {
     console.log('Fetched full trains:', fullTrains); // Add logging here
 
     if (fullTrains.length === 0) {
-      return res.status(404).json({ error: 'FullTrain not found' });
+      return res.status(404).json({ error: 'No FullTrains found' });
     }
 
     // Create an array of promises for real-time data requests
@@ -100,7 +111,6 @@ exports.getAllFullTrainsRealTimeData = async (req, res) => {
   }
 };
 
-
 // Get FullTrains by Train ID
 exports.getFullTrainsByTrainId = async (req, res) => {
   try {
@@ -114,6 +124,93 @@ exports.getFullTrainsByTrainId = async (req, res) => {
     res.json(fullTrains);
   } catch (error) {
     console.error('Error fetching FullTrains by Train ID:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Update FullTrain by Train ID
+exports.updateFullTrainByTrainId = async (req, res) => {
+  try {
+    const { train_id } = req.params;
+    const { engine_id } = req.body;
+
+    // Check if the engine_id is already assigned to another train
+    if (engine_id) {
+      const existingFullTrain = await FullTrain.findOne({ engine_id });
+      if (existingFullTrain && existingFullTrain.train_id !== train_id) {
+        return res.status(400).json({ error: 'This engine is already assigned to another train' });
+      }
+    }
+
+    // Proceed with updating the full train
+    const fullTrain = await FullTrain.findOneAndUpdate(
+      { train_id: train_id },
+      { engine_id: engine_id },
+      { new: true }
+    );
+    
+    if (!fullTrain) return res.status(404).json({ error: 'FullTrain not found' });
+
+    res.json(fullTrain);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Unassign Engine from a Train
+exports.unassignEngine = async (req, res) => {
+  try {
+    const { train_id } = req.params;
+
+    // Check if the train has an engine assigned
+    const fullTrain = await FullTrain.findOne({ train_id });
+    if (!fullTrain || fullTrain.engine_id === 'unassigned') {
+      return res.status(404).json({ error: 'Engine is not assigned to this train' });
+    }
+
+    // Unassign the engine
+    fullTrain.engine_id = 'unassigned';
+    await fullTrain.save();
+
+    res.json({ message: 'Engine unassigned from train' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Assign Engine to a Train
+exports.assignEngine = async (req, res) => {
+  try {
+    const { train_id, engine_id } = req.body;
+
+    // Check if all required fields are provided
+    if (!train_id || !engine_id) {
+      return res.status(400).json({ error: 'Both train_id and engine_id are required' });
+    }
+
+    // Check if the engine is already assigned to another train
+    const existingAssignment = await FullTrain.findOne({ engine_id });
+    if (existingAssignment && existingAssignment.train_id !== train_id) {
+      return res.status(400).json({ error: 'This engine is already assigned to another train' });
+    }
+
+    // Check if the train is already assigned an engine
+    const existingTrain = await FullTrain.findOne({ train_id });
+    if (existingTrain && existingTrain.engine_id !== 'unassigned') {
+      return res.status(400).json({ error: 'This train already has an assigned engine' });
+    }
+
+    // Assign the engine to the train
+    const fullTrain = await FullTrain.findOneAndUpdate(
+      { train_id },
+      { engine_id },
+      { new: true }
+    );
+
+    if (!fullTrain) return res.status(404).json({ error: 'Train not found' });
+
+    res.json(fullTrain);
+  } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };

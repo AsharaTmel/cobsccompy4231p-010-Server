@@ -5,8 +5,11 @@ const fullTrainController = require('../controllers/fulltrainController');
 // Create a new FullTrain
 router.post('/', fullTrainController.createFullTrain);
 
-// Unassign a FullTrain (delete by ID)
-router.delete('/:fulltrain_id', fullTrainController.unassignTrain);
+// Unassign an engine from a train
+router.patch('/train/:train_id/unassign', fullTrainController.unassignEngine);
+
+// Assign an engine to a train
+router.post('/train/assign', fullTrainController.assignEngine);
 
 // Update a FullTrain (by ID)
 router.put('/:fulltrain_id', fullTrainController.updateFullTrain);
@@ -22,5 +25,8 @@ router.get('/realtime', fullTrainController.getAllFullTrainsRealTimeData);
 
 // Get FullTrains by Train ID
 router.get('/train/:train_id', fullTrainController.getFullTrainsByTrainId);
+
+// Update a FullTrain by Train ID
+router.put('/train/:train_id', fullTrainController.updateFullTrainByTrainId);
 
 module.exports = router;
