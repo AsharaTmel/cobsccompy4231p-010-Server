@@ -1,4 +1,4 @@
-const FullTrain = require('../models/Fulltrain');
+const FullTrain = require('../models/FullTrain');
 const axios = require('axios'); // For making HTTP requests
 
 // Create FullTrain

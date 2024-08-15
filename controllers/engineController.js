@@ -1,10 +1,10 @@
 // engineController.js
 
 const Engine = require('../models/Engine');
-const FullTrain = require('../models/Fulltrain'); // Ensure this matches the model name
-
+const FullTrain = require('../models/FullTrain'); 
 const Train = require('../models/Train');
 const Route = require('../models/Route');
+const { generateRealTimeData } = require('../services/dataGenerationService'); // Importing the service module
 
 // Create Engine
 exports.createEngine = async (req, res) => {
@@ -64,67 +64,35 @@ exports.getEngineById = async (req, res) => {
   }
 };
 
-// Get Real-Time Data for Engine
+// /controllers/engineController.js
+
 exports.getRealTimeData = async (req, res) => {
   try {
     const engine = await Engine.findOne({ engine_id: req.params.engine_id });
     if (!engine) return res.status(404).json({ error: 'Engine not found' });
 
+    console.log('Engine found:', engine); // Debug log
+
     const fullTrain = await FullTrain.findOne({ engine_id: engine.engine_id });
     if (!fullTrain) return res.status(404).json({ error: 'FullTrain not found' });
+
+    console.log('FullTrain found:', fullTrain); // Debug log
 
     const train = await Train.findOne({ train_id: fullTrain.train_id });
     if (!train) return res.status(404).json({ error: 'Train not found' });
 
+    console.log('Train found:', train); // Debug log
+
     const route = await Route.findOne({ route_id: train.route_id });
     if (!route) return res.status(404).json({ error: 'Route not found' });
 
-    // Randomly generate direction
-    const directions = ['upward', 'downward'];
-    const direction = directions[Math.floor(Math.random() * directions.length)];
+    console.log('Route found:', route); // Debug log
 
-    // Randomly generate start time
-    const startTime = new Date();
-    const totalDuration = route.details.total_duration_minutes;
-    const endTime = new Date(startTime.getTime() + totalDuration * 60000);
-
-    // Determine start and end locations based on direction
-    const stations = train.stations;
-    let startLocation, endLocation, currentLocation;
-
-    if (direction === 'upward') {
-      startLocation = stations[0];
-      endLocation = stations[stations.length - 1];
-      currentLocation = startLocation;
-    } else {
-      startLocation = stations[stations.length - 1];
-      endLocation = stations[0];
-      currentLocation = startLocation;
-    }
-
-    // Generate a sequence of locations
-    const locations = [];
-    let currentIndex = direction === 'upward' ? 0 : stations.length - 1;
-    const step = direction === 'upward' ? 1 : -1;
-
-    while ((direction === 'upward' && currentIndex < stations.length) || (direction === 'downward' && currentIndex >= 0)) {
-      locations.push({
-        station: stations[currentIndex],
-        timestamp: new Date(startTime.getTime() + (locations.length * (Math.random() * (60 - 40) + 1)) * 60000) // Random time within 1-15 minutes intervals
-      });
-      currentIndex += step;
-    }
+    const realTimeData = generateRealTimeData(train, route, engine);
 
     res.json({
       engine_id: engine.engine_id,
-      train_name: train.train_name,
-      direction: direction,
-      start_time: startTime,
-      start_location: startLocation,
-      current_location: locations[0], // The initial location
-      estimated_end_time: endTime,
-      end_location: endLocation,
-      locations: locations
+      ...realTimeData
     });
   } catch (error) {
     console.error('Error fetching real-time data:', error.message);
