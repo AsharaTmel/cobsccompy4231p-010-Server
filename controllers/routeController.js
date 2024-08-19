@@ -1,6 +1,33 @@
 const Route = require('../models/Route');
 
-// Create Route
+/**
+ * @swagger
+ * /routes:
+ *   post:
+ *     summary: Create a new route
+ *     tags: [Routes]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Route'
+ *     responses:
+ *       201:
+ *         description: Route created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Route'
+ *       400:
+ *         description: Error creating route
+ */
+ /**
+  * Creates a new route.
+  * @param {Object} req - The request object containing route details in the body.
+  * @param {Object} res - The response object to send the result.
+  * @returns {void}
+  */
 exports.createRoute = async (req, res) => {
   try {
     const route = new Route(req.body);
@@ -12,7 +39,42 @@ exports.createRoute = async (req, res) => {
   }
 };
 
-// Update Route
+/**
+ * @swagger
+ * /routes/{route_id}:
+ *   put:
+ *     summary: Update an existing route
+ *     tags: [Routes]
+ *     parameters:
+ *       - in: path
+ *         name: route_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Route'
+ *     responses:
+ *       200:
+ *         description: Route updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Route'
+ *       404:
+ *         description: Route not found
+ *       400:
+ *         description: Error updating route
+ */
+ /**
+  * Updates an existing route by ID.
+  * @param {Object} req - The request object containing the route ID in the parameters and updated details in the body.
+  * @param {Object} res - The response object to send the result.
+  * @returns {void}
+  */
 exports.updateRoute = async (req, res) => {
   try {
     const route = await Route.findOneAndUpdate({ route_id: req.params.route_id }, req.body, { new: true });
@@ -27,7 +89,32 @@ exports.updateRoute = async (req, res) => {
   }
 };
 
-// Delete Route
+/**
+ * @swagger
+ * /routes/{route_id}:
+ *   delete:
+ *     summary: Delete an existing route
+ *     tags: [Routes]
+ *     parameters:
+ *       - in: path
+ *         name: route_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Route deleted successfully
+ *       404:
+ *         description: Route not found
+ *       400:
+ *         description: Error deleting route
+ */
+ /**
+  * Deletes an existing route by ID.
+  * @param {Object} req - The request object containing the route ID in the parameters.
+  * @param {Object} res - The response object to send the result.
+  * @returns {void}
+  */
 exports.deleteRoute = async (req, res) => {
   try {
     const route = await Route.findOneAndDelete({ route_id: req.params.route_id });
@@ -42,7 +129,30 @@ exports.deleteRoute = async (req, res) => {
   }
 };
 
-// Get All Routes
+/**
+ * @swagger
+ * /routes:
+ *   get:
+ *     summary: Get all routes
+ *     tags: [Routes]
+ *     responses:
+ *       200:
+ *         description: A list of all routes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Route'
+ *       400:
+ *         description: Error fetching routes
+ */
+ /**
+  * Retrieves all routes from the database.
+  * @param {Object} req - The request object.
+  * @param {Object} res - The response object to send the result.
+  * @returns {void}
+  */
 exports.getAllRoutes = async (req, res) => {
   try {
     const routes = await Route.find();
@@ -53,7 +163,36 @@ exports.getAllRoutes = async (req, res) => {
   }
 };
 
-// Get Route by ID
+/**
+ * @swagger
+ * /routes/{route_id}:
+ *   get:
+ *     summary: Get a route by ID
+ *     tags: [Routes]
+ *     parameters:
+ *       - in: path
+ *         name: route_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Route found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Route'
+ *       404:
+ *         description: Route not found
+ *       400:
+ *         description: Error fetching route
+ */
+ /**
+  * Retrieves a route by ID.
+  * @param {Object} req - The request object containing the route ID in the parameters.
+  * @param {Object} res - The response object to send the result.
+  * @returns {void}
+  */
 exports.getRouteById = async (req, res) => {
   try {
     const route = await Route.findOne({ route_id: req.params.route_id });

@@ -2,6 +2,28 @@ const FullTrain = require('../models/FullTrain');
 const axios = require('axios'); // For making HTTP requests
 
 // Create FullTrain
+/**
+ * @swagger
+ * /fulltrains:
+ *   post:
+ *     summary: Create a new FullTrain
+ *     tags: [FullTrains]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FullTrain'
+ *     responses:
+ *       201:
+ *         description: FullTrain created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FullTrain'
+ *       400:
+ *         description: Error creating FullTrain
+ */
 exports.createFullTrain = async (req, res) => {
   try {
     const fullTrain = new FullTrain(req.body);
@@ -13,6 +35,26 @@ exports.createFullTrain = async (req, res) => {
 };
 
 // Unassign Train from Engine
+/**
+ * @swagger
+ * /fulltrains/{fulltrain_id}:
+ *   delete:
+ *     summary: Unassign a train from an engine
+ *     tags: [FullTrains]
+ *     parameters:
+ *       - in: path
+ *         name: fulltrain_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: FullTrain unassigned successfully
+ *       404:
+ *         description: FullTrain not found
+ *       400:
+ *         description: Error unassigning FullTrain
+ */
 exports.unassignTrain = async (req, res) => {
   try {
     const fullTrain = await FullTrain.findByIdAndDelete(req.params.fulltrain_id);
@@ -24,6 +66,36 @@ exports.unassignTrain = async (req, res) => {
 };
 
 // Update FullTrain
+/**
+ * @swagger
+ * /fulltrains/{fulltrain_id}:
+ *   put:
+ *     summary: Update an existing FullTrain
+ *     tags: [FullTrains]
+ *     parameters:
+ *       - in: path
+ *         name: fulltrain_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FullTrain'
+ *     responses:
+ *       200:
+ *         description: FullTrain updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FullTrain'
+ *       404:
+ *         description: FullTrain not found
+ *       400:
+ *         description: Error updating FullTrain
+ */
 exports.updateFullTrain = async (req, res) => {
   try {
     const { engine_id } = req.body;
@@ -46,6 +118,24 @@ exports.updateFullTrain = async (req, res) => {
 };
 
 // Get All FullTrains
+/**
+ * @swagger
+ * /fulltrains:
+ *   get:
+ *     summary: Get all FullTrains
+ *     tags: [FullTrains]
+ *     responses:
+ *       200:
+ *         description: List of all FullTrains
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/FullTrain'
+ *       400:
+ *         description: Error fetching FullTrains
+ */
 exports.getAllFullTrains = async (req, res) => {
   try {
     const fullTrains = await FullTrain.find();
@@ -56,6 +146,30 @@ exports.getAllFullTrains = async (req, res) => {
 };
 
 // Get a single FullTrain by ID
+/**
+ * @swagger
+ * /fulltrains/{fulltrain_id}:
+ *   get:
+ *     summary: Get a FullTrain by ID
+ *     tags: [FullTrains]
+ *     parameters:
+ *       - in: path
+ *         name: fulltrain_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: FullTrain found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FullTrain'
+ *       404:
+ *         description: FullTrain not found
+ *       400:
+ *         description: Error fetching FullTrain
+ */
 exports.getFullTrainById = async (req, res) => {
   try {
     const fullTrain = await FullTrain.findOne({ fulltrain_id: req.params.fulltrain_id });
@@ -67,6 +181,38 @@ exports.getFullTrainById = async (req, res) => {
 };
 
 // Get Real-Time Data for All Full Trains
+/**
+ * @swagger
+ * /fulltrains/realtime:
+ *   get:
+ *     summary: Get real-time data for all FullTrains
+ *     tags: [FullTrains]
+ *     responses:
+ *       200:
+ *         description: Real-time data for all FullTrains
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   fulltrain_id:
+ *                     type: string
+ *                   train_id:
+ *                     type: string
+ *                   engine_id:
+ *                     type: string
+ *                   realTimeData:
+ *                     type: object
+ *                     additionalProperties: true
+ *                   error:
+ *                     type: string
+ *       404:
+ *         description: No FullTrains found
+ *       500:
+ *         description: Error fetching real-time data for all FullTrains
+ */
 exports.getAllFullTrainsRealTimeData = async (req, res) => {
   try {
     // Fetch all full trains
@@ -112,6 +258,32 @@ exports.getAllFullTrainsRealTimeData = async (req, res) => {
 };
 
 // Get FullTrains by Train ID
+/**
+ * @swagger
+ * /fulltrains/train/{train_id}:
+ *   get:
+ *     summary: Get FullTrains by Train ID
+ *     tags: [FullTrains]
+ *     parameters:
+ *       - in: path
+ *         name: train_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of FullTrains for the Train ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/FullTrain'
+ *       404:
+ *         description: No FullTrains found for this Train ID
+ *       400:
+ *         description: Error fetching FullTrains by Train ID
+ */
 exports.getFullTrainsByTrainId = async (req, res) => {
   try {
     const train_id = req.params.train_id;
@@ -129,6 +301,39 @@ exports.getFullTrainsByTrainId = async (req, res) => {
 };
 
 // Update FullTrain by Train ID
+/**
+ * @swagger
+ * /fulltrains/train/{train_id}:
+ *   put:
+ *     summary: Update FullTrain by Train ID
+ *     tags: [FullTrains]
+ *     parameters:
+ *       - in: path
+ *         name: train_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               engine_id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: FullTrain updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FullTrain'
+ *       404:
+ *         description: FullTrain not found
+ *       400:
+ *         description: Error updating FullTrain
+ */
 exports.updateFullTrainByTrainId = async (req, res) => {
   try {
     const { train_id } = req.params;
@@ -158,6 +363,26 @@ exports.updateFullTrainByTrainId = async (req, res) => {
 };
 
 // Unassign Engine from a Train
+/**
+ * @swagger
+ * /fulltrains/train/{train_id}/unassign:
+ *   patch:
+ *     summary: Unassign engine from a train
+ *     tags: [FullTrains]
+ *     parameters:
+ *       - in: path
+ *         name: train_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Engine unassigned successfully
+ *       404:
+ *         description: Engine not assigned to this train
+ *       400:
+ *         description: Error unassigning engine
+ */
 exports.unassignEngine = async (req, res) => {
   try {
     const { train_id } = req.params;
@@ -179,6 +404,35 @@ exports.unassignEngine = async (req, res) => {
 };
 
 // Assign Engine to a Train
+/**
+ * @swagger
+ * /fulltrains/assign:
+ *   post:
+ *     summary: Assign an engine to a train
+ *     tags: [FullTrains]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               train_id:
+ *                 type: string
+ *               engine_id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Engine assigned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FullTrain'
+ *       400:
+ *         description: Error assigning engine
+ *       404:
+ *         description: Train not found
+ */
 exports.assignEngine = async (req, res) => {
   try {
     const { train_id, engine_id } = req.body;
@@ -214,3 +468,4 @@ exports.assignEngine = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
