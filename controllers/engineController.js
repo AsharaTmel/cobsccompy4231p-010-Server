@@ -211,28 +211,22 @@ exports.getRealTimeData = async (req, res) => {
     const engine = await Engine.findOne({ engine_id: req.params.engine_id });
     if (!engine) return res.status(404).json({ error: 'Engine not found' });
 
-    console.log('Engine found:', engine); // Debug log
-
     const fullTrain = await FullTrain.findOne({ engine_id: engine.engine_id });
     if (!fullTrain) return res.status(404).json({ error: 'FullTrain not found' });
-
-    console.log('FullTrain found:', fullTrain); // Debug log
 
     const train = await Train.findOne({ train_id: fullTrain.train_id });
     if (!train) return res.status(404).json({ error: 'Train not found' });
 
-    console.log('Train found:', train); // Debug log
-
     const route = await Route.findOne({ route_id: train.route_id });
     if (!route) return res.status(404).json({ error: 'Route not found' });
 
-    console.log('Route found:', route); // Debug log
-
+    // Exclude start_time, start_location, and estimated_end_time from response
     const realTimeData = generateRealTimeData(train, route, engine);
+    const { start_time, start_location, estimated_end_time, ...filteredData } = realTimeData;
 
     res.json({
       engine_id: engine.engine_id,
-      ...realTimeData
+      ...filteredData
     });
   } catch (error) {
     console.error('Error fetching real-time data:', error.message);
