@@ -1,0 +1,457 @@
+openapi: 3.0.3
+info:
+  title: Train Tracking System API
+  description: API for managing trains, routes, engines, historical data, and full trains.
+  version: 1.0.0
+paths:
+  /engines:
+    get:
+      summary: Get all engines
+      responses:
+        '200':
+          description: List of engines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Engine'
+    post:
+      summary: Create a new engine
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Engine'
+        required: true
+      responses:
+        '201':
+          description: Engine created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Engine'
+  /engines/{engine_id}:
+    get:
+      summary: Get a specific engine by ID
+      parameters:
+        - name: engine_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Engine details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Engine'
+    put:
+      summary: Update an existing engine
+      parameters:
+        - name: engine_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Engine'
+        required: true
+      responses:
+        '200':
+          description: Engine updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Engine'
+    delete:
+      summary: Delete an engine
+      parameters:
+        - name: engine_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Engine deleted
+    get:
+      summary: Get real-time data for an engine
+      parameters:
+        - name: engine_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Real-time data for the engine
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  realTimeData:
+                    type: object
+  /fulltrains:
+    get:
+      summary: Get all full trains
+      responses:
+        '200':
+          description: List of full trains
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FullTrain'
+    post:
+      summary: Create a new full train
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullTrain'
+        required: true
+      responses:
+        '201':
+          description: Full train created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullTrain'
+  /fulltrains/{fulltrain_id}:
+    get:
+      summary: Get a specific full train by ID
+      parameters:
+        - name: fulltrain_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Full train details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullTrain'
+    put:
+      summary: Update an existing full train
+      parameters:
+        - name: fulltrain_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullTrain'
+        required: true
+      responses:
+        '200':
+          description: Full train updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullTrain'
+  /historicaldata:
+    get:
+      summary: Get historical data
+      responses:
+        '200':
+          description: Historical data list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricalData'
+    post:
+      summary: Save historical data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HistoricalData'
+        required: true
+      responses:
+        '200':
+          description: Historical data saved
+  /routes:
+    get:
+      summary: Get all routes
+      responses:
+        '200':
+          description: List of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+    post:
+      summary: Create a new route
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Route'
+        required: true
+      responses:
+        '201':
+          description: Route created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+  /routes/{route_id}:
+    get:
+      summary: Get a specific route by ID
+      parameters:
+        - name: route_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Route details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+    put:
+      summary: Update an existing route
+      parameters:
+        - name: route_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Route'
+        required: true
+      responses:
+        '200':
+          description: Route updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+    delete:
+      summary: Delete a route
+      parameters:
+        - name: route_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Route deleted
+  /trains:
+    get:
+      summary: Get all trains
+      responses:
+        '200':
+          description: List of trains
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Train'
+    post:
+      summary: Create a new train
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Train'
+        required: true
+      responses:
+        '201':
+          description: Train created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+  /trains/{train_id}:
+    get:
+      summary: Get a specific train by ID
+      parameters:
+        - name: train_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Train details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+    put:
+      summary: Update an existing train
+      parameters:
+        - name: train_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Train'
+        required: true
+      responses:
+        '200':
+          description: Train updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Train'
+    delete:
+      summary: Delete a train
+      parameters:
+        - name: train_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Train deleted
+
+components:
+  schemas:
+    Engine:
+      type: object
+      properties:
+        engine_id:
+          type: string
+        engine_number:
+          type: string
+        other_details:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: ['Diesel', 'Electric']
+            capacity:
+              type: string
+            year_of_manufacture:
+              type: integer
+      required:
+        - engine_id
+        - engine_number
+        - other_details
+
+    FullTrain:
+      type: object
+      properties:
+        fulltrain_id:
+          type: string
+        train_id:
+          type: string
+        engine_id:
+          type: string
+      required:
+        - fulltrain_id
+        - train_id
+        - engine_id
+
+    HistoricalData:
+      type: object
+      properties:
+        engine_id:
+          type: string
+        train_name:
+          type: string
+        direction:
+          type: string
+        start_time:
+          type: string
+        start_location:
+          type: string
+        current_location:
+          type: string
+        estimated_end_time:
+          type: string
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              station:
+                type: string
+              timestamp:
+                type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - engine_id
+        - train_name
+        - direction
+        - start_time
+        - start_location
+        - current_location
+        - estimated_end_time
+
+    Route:
+      type: object
+      properties:
+        route_id:
+          type: string
+        route_name:
+          type: string
+        details:
+          type: object
+          properties:
+            start_station:
+              type: string
+            end_station:
+              type: string
+            total_distance_km:
+              type: integer
+            total_duration_minutes:
+              type: integer
+      required:
+        - route_id
+        - route_name
+        - details
+
+    Train:
+      type: object
+      properties:
+        train_id:
+          type: string
+        train_name:
+          type: string
+        route_id:
+          type: string
+        direction:
+          type: string
+          enum: ['upward', 'downward']
+        stations:
+          type: array
+          items:
+            type: string
+      required:
+        - train_id
+        - train_name
+        - route_id
+        - direction
